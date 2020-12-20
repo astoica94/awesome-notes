@@ -1,12 +1,11 @@
+// Framework/library dependencies
 import React, { useState, useRef } from 'react';
 import { v4 as uuid } from 'uuid';
 import { useTranslation } from 'react-i18next';
 import i18n from 'i18next';
 import reject from 'lodash/reject';
 
-import './i18n';
-import './App.css';
-
+// Material UI Component Dependencies
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -32,6 +31,11 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Chip from '@material-ui/core/Chip';
 
+// Internal app dependencies
+import './i18n';
+import './App.css';
+
+// Global styles for app root
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -39,28 +43,38 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// Map for Icons to show based on note priority
 const priorityIconMap = {
   0: ExpandMoreIcon,
   1: ExpandLessIcon,
   2: PriorityHighIcon,
 };
 
+// Map for testIds to use based on note priority
 const priorityIconTestIdMap = {
   0: 'NOTE_ITEM_PRIORITY_MINOR_ICON',
   1: 'NOTE_ITEM_PRIORITY_MAJOR_ICON',
   2: 'NOTE_ITEM_PRIORITY_BLOCKER_ICON',
 };
 
+// The app
 function App() {
+  // Global classes React hook
   const classes = useStyles();
 
+  // Priority value of the new note (default: 0 - minor)
   const [priority, setPriority] = useState(0);
+  // Note text value (default: '')
   const [inputValue, setInputValue] = useState('');
+  // Error state of the add new note
   const [hasError, setHasError] = useState(false);
+  // Visibility state of the delete confirmation modal
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
 
+  // The id of the note to be deleted
   const noteIdToDelete = useRef(null);
 
+  // List of the notes (this array is disblayed on the screen)
   const [notes, setNotes] = useState([
     { id: uuid(), priority: 0, text: 'Pay electricity bills' },
     { id: uuid(), priority: 1, text: 'Order food from local grocery store' },
@@ -69,24 +83,37 @@ function App() {
     { id: uuid(), priority: 2, text: 'Finish university project to receive a good grade' },
   ]);
 
+  // Localisation hook
   const { t } = useTranslation();
 
+  // Translated name of the available priorities
   const priorityTextMap = {
     0: t('MINOR'),
     1: t('MAJOR'),
     2: t('BLOCKER'),
   };
 
+  /**
+   * Callback executed when the priority select is changed
+   * @param {Object} e Syntetic event
+   */
   function onSelectChange(e) {
     setPriority(e.target.value);
   }
 
+  /**
+   * Callback executed when the note text input is changed
+   * @param {Object} e Syntetic event
+   */
   function onInputChange(e) {
     setInputValue(e.target.value);
 
     setHasError(false);
   }
 
+  /**
+   * Callback executed when the Add note button is clicked
+   */
   function onAddNoteClick() {
     const noteText = inputValue.trim();
 
@@ -95,21 +122,36 @@ function App() {
       return;
     }
 
+    // add new note
     setNotes(prevState => [...prevState, { id: uuid(), priority, text: inputValue }]);
 
+    // reset the input value to default ('')
     setInputValue('');
   }
 
+  /**
+   * Callback for click on a delete note icon
+   * @param {String} noteId UUID of the note (Note Unique Identifier)
+   */
   function onDeleteNoteClick(noteId) {
     setIsDeleteConfirmationOpen(true);
     noteIdToDelete.current = noteId;
   }
 
+  /**
+   * Close the delete confirmation modal by dismissing the delete action
+   */
   function onDeleteConfirmationClose() {
     setIsDeleteConfirmationOpen(false);
     noteIdToDelete.current = undefined;
   }
 
+  /**
+   * Confirm the delete action:
+   * - remove the note from the list of the notes
+   * - close the delete confrimation modal
+   * - set the noteIdToDelete to undefined
+   */
   function onDeleteConfirm() {
     if (noteIdToDelete.current) {
       setNotes(prevState => reject(prevState, { id: noteIdToDelete.current }));
@@ -119,10 +161,16 @@ function App() {
     noteIdToDelete.current = undefined;
   }
 
+  /**
+   * Change the application's language
+   * @param {String} language Language code string ('en', 'ro')
+   * @return {Promise<void>}
+   */
   async function changeLanguage(language) {
     await i18n.changeLanguage(language);
   }
 
+  // Application JSX
   return (
     <div data-test-id="APP_ROOT" className={classes.root}>
 
