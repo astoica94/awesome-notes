@@ -1,0 +1,18 @@
+{
+  "ADD_NOTE": "Adauga nota",
+  "ARE_YOU_SURE_DELETE": "Esti sigur ca vrei sa stergi nota asta? Actiunea asta nu se poate reface",
+  "BLOCKER": "Blocant",
+  "DELETE": "Sterge",
+  "DELETE_NOTE_CONFIRMATION": "Confirma stergerea",
+  "ENGLISH": "Engleza",
+  "MAJOR": "Majora",
+  "MINOR": "Minora",
+  "NEW_NOTE": "Nota noua",
+  "NO": "Nu",
+  "NOTE_TEXT_IS_REQUIRED": "Texul notei e obligatoriu",
+  "PLEASE_WRITE_NEW_NOTE": "Te rog sa scrii nota",
+  "PRIORITY": "Prioritate",
+  "ROMANIAN": "Romana",
+  "SELECT_LANGUAGE": "Selecteaza limba",
+  "YES_DELETE": "Da, sterge"
+}
